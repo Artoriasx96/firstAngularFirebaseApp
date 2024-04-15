@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "firstangularapp-c2f28": {
+      "hosting": {
+        "first-app": [
+          "firstangularapp-c2f28"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "firstangularapp-c2f28"
+  }
+}

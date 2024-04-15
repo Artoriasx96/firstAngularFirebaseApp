@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "@angular/cli": "^17.3.4",
+    "@angular/core": "^17.3.4",
+    "@angular/fire": "^17.0.1",
+    "@angular/forms": "^17.3.4",
+    "@angular/router": "^17.3.4",
+    "dev-server": "^0.2.0",
+    "pdfjs-dist": "^3.11.174"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^17.3.4"
+  }
+}
