@@ -1,6 +1,6 @@
 import {
   AuthInstances
-} from "./chunk-EHOQ5257.js";
+} from "./chunk-JRXQ3JDI.js";
 import {
   FirebaseApp,
   FirebaseApps,
@@ -10,20 +10,8 @@ import {
   ɵgetAllInstancesOf,
   ɵgetDefaultInstanceOf,
   ɵzoneWrap
-} from "./chunk-W2RUNZS7.js";
+} from "./chunk-DJMJEVAS.js";
 import "./chunk-7W3OF5WP.js";
-import {
-  Component,
-  FirebaseError,
-  SDK_VERSION,
-  _getProvider,
-  _registerComponent,
-  createMockUserToken,
-  getApp,
-  getDefaultEmulatorHostnameAndPort,
-  getModularInstance,
-  registerVersion
-} from "./chunk-OW5A6VCI.js";
 import {
   InjectionToken,
   Injector,
@@ -40,6 +28,18 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule
 } from "./chunk-LHHGLCJB.js";
+import {
+  Component,
+  FirebaseError,
+  SDK_VERSION,
+  _getProvider,
+  _registerComponent,
+  createMockUserToken,
+  getApp,
+  getDefaultEmulatorHostnameAndPort,
+  getModularInstance,
+  registerVersion
+} from "./chunk-OW5A6VCI.js";
 import {
   __async
 } from "./chunk-LJ4VCL4A.js";

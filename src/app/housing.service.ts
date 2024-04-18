@@ -1,13 +1,15 @@
 import {Injectable} from '@angular/core';
 import {HousingLocation} from './housinglocation';
 import {initializeApp} from "firebase/app";
-import {collection, getFirestore, getDocs} from "firebase/firestore";
-
+import { collection, getFirestore, getDocs, doc, deleteDoc} from "firebase/firestore";
+import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root',
 })
 
 export class HousingService {
+
+  constructor(private router: Router) { }
 
   firebaseConfig = {
     apiKey: "AIzaSyCHzqNHDdlM4ZOZcA0pDyQIFVW_W7yfubU",
@@ -22,19 +24,24 @@ export class HousingService {
   app = initializeApp(this.firebaseConfig);
   db = getFirestore(this.app);
 
-  async getAllHousingLocations(): Promise<HousingLocation[]> {
-    const snapshot = await getDocs(collection(this.db, 'locations'));
-    const data = (await snapshot).docs.map(doc => doc.data());
-    const jsonData = JSON.parse(JSON.stringify(data));
-    return (jsonData) ?? [];
+  redirect() {
+    this.router.navigate(['']);
   }
-  
+
+  async getAllHousingLocations(): Promise<HousingLocation[]> {
+    const data = JSON.parse(JSON.stringify((await getDocs(collection(this.db, 'locations'))).docs.map((doc, index)=> ({...doc.data(), fID: doc.id, id: index}))));
+    return (data) ?? [];
+  }
 
   async getHousingLocationById(id: number): Promise<HousingLocation | undefined> {
-    const snapshot = await getDocs(collection(this.db, 'locations'));
-    const data = (await snapshot).docs.map(doc => doc.data());
-    const jsonData = JSON.parse(JSON.stringify(data));
-    return (jsonData[id]) ?? {};
+    const data = JSON.parse(JSON.stringify((await getDocs(collection(this.db, 'locations'))).docs.map((doc, index)=> ({...doc.data(), fID: doc.id, id: index}))));
+    return (data[id]) ?? {};
+  }
+
+  async delHousingLocationById(id: number) {
+    const data = JSON.parse(JSON.stringify((await getDocs(collection(this.db, 'locations'))).docs.map((doc, index)=> ({...doc.data(), fID: doc.id, id: index}))));
+    return deleteDoc(doc(this.db, "locations", String(data[id].fID)));
+    this.router.navigate(['']);
   }
 
   submitApplication(firstName: string, lastName: string, email: string) {
