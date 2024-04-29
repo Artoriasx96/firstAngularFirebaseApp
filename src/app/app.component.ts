@@ -7,10 +7,13 @@ import {RouterLink, RouterOutlet} from '@angular/router';
   imports: [HomeComponent, RouterLink, RouterOutlet],
   template: `
     <main>
-      <a [routerLink]="['/']">
+    <a [routerLink]="['/']">
         <header class="brand-name">
           <img class="brand-logo" src="/assets/logo.svg" alt="logo" aria-hidden="true" />
         </header>
+      </a>
+      <a [routerLink]="['/new']">
+        Create
       </a>
       <section class="content">
         <router-outlet></router-outlet>

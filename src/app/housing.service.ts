@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HousingLocation} from './housinglocation';
 import {initializeApp} from "firebase/app";
-import { collection, getFirestore, getDocs, doc, deleteDoc} from "firebase/firestore";
+import { collection, getFirestore, getDocs, doc, deleteDoc, addDoc } from "firebase/firestore";
 import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root',
@@ -25,7 +25,8 @@ export class HousingService {
   db = getFirestore(this.app);
   data : HousingLocation[] = [];
 
-  redirect() {
+  refresh() {
+    this.getAllHousingLocations();
     this.router.navigate(['']);
   }
 
@@ -40,8 +41,20 @@ export class HousingService {
 
   async delHousingLocationById(id: number) {
     deleteDoc(doc(this.db, "locations", String(this.data[id].fID)));
-    this.getAllHousingLocations();
-    return this.redirect();
+    return this.refresh();
+  }
+
+  async addHousingLocation(name: string, city: string, state: string, photo: string, availableUnits: number, wifi: boolean, laundry: boolean) {
+    await addDoc(collection(this.db, "locations"), {
+      name: name,
+      city: city,
+      state: state,
+      photo: photo,
+      availableUnits: availableUnits,
+      wifi: wifi,
+      laundry: laundry
+    });
+    return this.refresh();
   }
 
   submitApplication(firstName: string, lastName: string, email: string) {
