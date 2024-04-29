@@ -23,25 +23,25 @@ export class HousingService {
 
   app = initializeApp(this.firebaseConfig);
   db = getFirestore(this.app);
+  data : HousingLocation[] = [];
 
   redirect() {
     this.router.navigate(['']);
   }
 
   async getAllHousingLocations(): Promise<HousingLocation[]> {
-    const data = JSON.parse(JSON.stringify((await getDocs(collection(this.db, 'locations'))).docs.map((doc, index)=> ({...doc.data(), fID: doc.id, id: index}))));
-    return (data) ?? [];
+    this.data = JSON.parse(JSON.stringify((await getDocs(collection(this.db, 'locations'))).docs.map((doc, index)=> ({...doc.data(), fID: doc.id, id: index}))));
+    return (this.data) ?? [];
   }
 
   async getHousingLocationById(id: number): Promise<HousingLocation | undefined> {
-    const data = JSON.parse(JSON.stringify((await getDocs(collection(this.db, 'locations'))).docs.map((doc, index)=> ({...doc.data(), fID: doc.id, id: index}))));
-    return (data[id]) ?? {};
+    return (this.data[id]) ?? {};
   }
 
   async delHousingLocationById(id: number) {
-    const data = JSON.parse(JSON.stringify((await getDocs(collection(this.db, 'locations'))).docs.map((doc, index)=> ({...doc.data(), fID: doc.id, id: index}))));
-    return deleteDoc(doc(this.db, "locations", String(data[id].fID)));
-    this.router.navigate(['']);
+    deleteDoc(doc(this.db, "locations", String(this.data[id].fID)));
+    this.getAllHousingLocations();
+    return this.redirect();
   }
 
   submitApplication(firstName: string, lastName: string, email: string) {
