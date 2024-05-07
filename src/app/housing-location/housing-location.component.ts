@@ -1,7 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {HousingLocation} from '../housinglocation';
-import { HousingService } from '../housing.service';
 import {RouterModule} from '@angular/router';
 
 @Component({
@@ -23,6 +22,8 @@ import {RouterModule} from '@angular/router';
   `,
   styleUrls: ['./housing-location.component.css'],
 })
+
 export class HousingLocationComponent {
+  //Shows each house on the home page  
   @Input() housingLocation!: HousingLocation;
 }

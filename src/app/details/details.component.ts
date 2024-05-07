@@ -1,14 +1,15 @@
 import {Component, inject} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {HousingService} from '../housing.service';
 import {HousingLocation} from '../housinglocation';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-details',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   
   template: `
     <article>
@@ -31,42 +32,24 @@ import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
         </ul>
       </section>
       <section class="listing-apply">
-        <h2 class="section-heading">Apply now to live here</h2>
-        <form [formGroup]="applyForm" (submit)="submitApplication()">
-          <label for="first-name">First Name</label>
-          <input id="first-name" type="text" formControlName="firstName" />
-          <label for="last-name">Last Name</label>
-          <input id="last-name" type="text" formControlName="lastName" />
-          <label for="email">Email</label>
-          <input id="email" type="email" formControlName="email" />
-          <button type="submit" class="primary">Apply now</button>
-          <button class="btn btn-success" value ="/" (click)="housingService.delHousingLocationById(housingLocation?.id!)">Delete</button>
-        </form>
+        <button class="primary" [routerLink]="['/edit/',housingLocation?.id!]">Edit</button>
+        <button class="primary" (click)="housingService.delHousingLocationById(housingLocation?.id!)">Delete</button>
       </section>
     </article>
   `,
   styleUrls: ['./details.component.css'],
 })
+
 export class DetailsComponent {
+  //The route :id parameter is parsed into an integer that is used to call the housingService.getHousingLocationById() function and returns a specific house by the id.
+  //The :id is also passed to the form buttons; edit button routes to a UPDATE query and delete button routes to a DELETE query.
   route: ActivatedRoute = inject(ActivatedRoute);
   housingService = inject(HousingService);
   housingLocation: HousingLocation | undefined;
-  applyForm = new FormGroup({
-    firstName: new FormControl(''),
-    lastName: new FormControl(''),
-    email: new FormControl(''),
-  });
   constructor() {
     const housingLocationId = parseInt(this.route.snapshot.params['id'], 10);
     this.housingService.getHousingLocationById(housingLocationId).then((housingLocation) => {
       this.housingLocation = housingLocation;
     });
-  }
-  submitApplication() {
-    this.housingService.submitApplication(
-      this.applyForm.value.firstName ?? '',
-      this.applyForm.value.lastName ?? '',
-      this.applyForm.value.email ?? '',
-    );
   }
 }

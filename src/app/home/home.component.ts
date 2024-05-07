@@ -19,12 +19,13 @@ import {HousingService} from '../housing.service';
         *ngFor="let housingLocation of filteredLocationList"
         [housingLocation]="housingLocation"
       ></app-housing-location>
-    </section>
-  `,
+    </section>`,
   styleUrls: ['./home.component.css'],
 })
+
 export class HomeComponent {
-  
+  //The housingService.getAllHousingLocations() function is called to query all the data into the housingLocationList array. Which also fills the filteredLocationList array with the same data.
+  //The Search button filters the amount of data comparing the input text with the one on the array, showing only the data which city is similar to the one input by the user.
   housingLocationList: HousingLocation[] = [];
   housingService: HousingService = inject(HousingService);
   filteredLocationList: HousingLocation[] = [];

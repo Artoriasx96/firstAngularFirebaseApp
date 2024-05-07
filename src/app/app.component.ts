@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {HomeComponent} from './home/home.component';
 import {RouterLink, RouterOutlet} from '@angular/router';
 @Component({
+  //Top component of the app, used to route to Home and to Create a house.
   selector: 'app-root',
   standalone: true,
   imports: [HomeComponent, RouterLink, RouterOutlet],
@@ -22,6 +23,7 @@ import {RouterLink, RouterOutlet} from '@angular/router';
   `,
   styleUrls: ['./app.component.css'],
 })
+
 export class AppComponent {
   title = 'homes';
 }

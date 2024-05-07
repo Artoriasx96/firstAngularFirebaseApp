@@ -1,16 +1,16 @@
 import {Injectable} from '@angular/core';
 import {HousingLocation} from './housinglocation';
 import {initializeApp} from "firebase/app";
-import { collection, getFirestore, getDocs, doc, deleteDoc, addDoc } from "firebase/firestore";
-import { Router } from '@angular/router';
+import {collection, getFirestore, getDocs, doc, deleteDoc, addDoc, updateDoc} from "firebase/firestore";
+import {Router} from '@angular/router';
 @Injectable({
   providedIn: 'root',
 })
 
 export class HousingService {
-
+  //Router is initialized to be used later to redirect.
   constructor(private router: Router) { }
-
+  //Firebase database is initialized using the firebaseConfig.
   firebaseConfig = {
     apiKey: "AIzaSyCHzqNHDdlM4ZOZcA0pDyQIFVW_W7yfubU",
     authDomain: "firstangularapp-c2f28.firebaseapp.com",
@@ -25,26 +25,27 @@ export class HousingService {
   db = getFirestore(this.app);
   data : HousingLocation[] = [];
 
-  refresh() {
-    this.getAllHousingLocations();
-    this.router.navigate(['']);
-  }
-
   async getAllHousingLocations(): Promise<HousingLocation[]> {
+    //All Firebase data is queried and parsed into a JSON array.
     this.data = JSON.parse(JSON.stringify((await getDocs(collection(this.db, 'locations'))).docs.map((doc, index)=> ({...doc.data(), fID: doc.id, id: index}))));
     return (this.data) ?? [];
   }
 
   async getHousingLocationById(id: number): Promise<HousingLocation | undefined> {
+    //Specific house data by the id is queried to Firebase and parsed into a JSON array.
+    this.data = JSON.parse(JSON.stringify((await getDocs(collection(this.db, 'locations'))).docs.map((doc, index)=> ({...doc.data(), fID: doc.id, id: index}))));
     return (this.data[id]) ?? {};
   }
 
   async delHousingLocationById(id: number) {
+    //Specific house by the id is queried to be deleted to Firebase. The data is queried again to refresh the app and it's redirected to the home page.
     deleteDoc(doc(this.db, "locations", String(this.data[id].fID)));
-    return this.refresh();
+    this.data = JSON.parse(JSON.stringify((await getDocs(collection(this.db, 'locations'))).docs.map((doc, index)=> ({...doc.data(), fID: doc.id, id: index}))));
+    this.router.navigate(['/']);
   }
 
   async addHousingLocation(name: string, city: string, state: string, photo: string, availableUnits: number, wifi: boolean, laundry: boolean) {
+    //A new house is queried to be added to Firebase. The data is queried again to refresh the app and it's redirected to the home page.
     await addDoc(collection(this.db, "locations"), {
       name: name,
       city: city,
@@ -54,11 +55,23 @@ export class HousingService {
       wifi: wifi,
       laundry: laundry
     });
-    return this.refresh();
+    this.data = JSON.parse(JSON.stringify((await getDocs(collection(this.db, 'locations'))).docs.map((doc, index)=> ({...doc.data(), fID: doc.id, id: index}))));
+    this.router.navigate(['/']);
   }
 
-  submitApplication(firstName: string, lastName: string, email: string) {
-    // tslint:disable-next-line
-    console.log(firstName, lastName, email);
+  async updateHousingLocation(fID: string, id: number, name: string, city: string, state: string, photo: string, availableUnits: number, wifi: boolean, laundry: boolean) {
+    //Specific house by the id is queried to be updated to Firebase. The data is queried again to refresh the app and it's redirected to the details page of the modified house.
+    await updateDoc(doc(this.db, "locations", fID), {
+      name: name,
+      city: city,
+      state: state,
+      photo: photo,
+      availableUnits: availableUnits,
+      wifi: wifi,
+      laundry: laundry
+    });
+    this.data = JSON.parse(JSON.stringify((await getDocs(collection(this.db, 'locations'))).docs.map((doc, index)=> ({...doc.data(), fID: doc.id, id: index}))));
+    return this.router.navigate(['details/',id]);
   }
+
 }
