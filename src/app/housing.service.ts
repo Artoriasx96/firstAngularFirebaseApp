@@ -33,14 +33,12 @@ export class HousingService {
 
   async getHousingLocationById(id: number): Promise<HousingLocation | undefined> {
     //Specific house data by the id is queried to Firebase and parsed into a JSON array.
-    this.data = JSON.parse(JSON.stringify((await getDocs(collection(this.db, 'locations'))).docs.map((doc, index)=> ({...doc.data(), fID: doc.id, id: index}))));
     return (this.data[id]) ?? {};
   }
 
   async delHousingLocationById(id: number) {
     //Specific house by the id is queried to be deleted to Firebase. The data is queried again to refresh the app and it's redirected to the home page.
     deleteDoc(doc(this.db, "locations", String(this.data[id].fID)));
-    this.data = JSON.parse(JSON.stringify((await getDocs(collection(this.db, 'locations'))).docs.map((doc, index)=> ({...doc.data(), fID: doc.id, id: index}))));
     this.router.navigate(['/']);
   }
 
@@ -55,7 +53,6 @@ export class HousingService {
       wifi: wifi,
       laundry: laundry
     });
-    this.data = JSON.parse(JSON.stringify((await getDocs(collection(this.db, 'locations'))).docs.map((doc, index)=> ({...doc.data(), fID: doc.id, id: index}))));
     this.router.navigate(['/']);
   }
 
@@ -70,7 +67,6 @@ export class HousingService {
       wifi: wifi,
       laundry: laundry
     });
-    this.data = JSON.parse(JSON.stringify((await getDocs(collection(this.db, 'locations'))).docs.map((doc, index)=> ({...doc.data(), fID: doc.id, id: index}))));
     return this.router.navigate(['details/',id]);
   }
 

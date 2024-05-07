@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HomeComponent} from './home/home.component';
-import {RouterLink, RouterOutlet} from '@angular/router';
+import {Router, RouterLink, RouterOutlet} from '@angular/router';
 @Component({
   //Top component of the app, used to route to Home and to Create a house.
   selector: 'app-root',
@@ -24,6 +24,10 @@ import {RouterLink, RouterOutlet} from '@angular/router';
   styleUrls: ['./app.component.css'],
 })
 
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'homes';
+  constructor(private router: Router) { }
+  ngOnInit() {
+    this.router.navigate(['/']);
+  }
 }
